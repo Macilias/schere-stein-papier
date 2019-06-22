@@ -1,4 +1,10 @@
 package com.macilias.games.controller;
 
-public class Game {
+import com.macilias.games.model.Choice;
+
+public interface Game {
+
+    int choose(Choice c);
+
+    String getScore();
 }
