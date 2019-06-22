@@ -3,6 +3,7 @@ package com.macilias.games.view;
 import com.macilias.games.controller.Game;
 import com.macilias.games.controller.GameImpl;
 import com.macilias.games.model.Choice;
+import com.macilias.games.model.Varriant;
 
 import java.util.Scanner;
 
@@ -11,9 +12,20 @@ public class Main {
     public static void main(String... args) {
         Scanner s = new Scanner(System.in);
         Game game = new GameImpl();
+        Varriant v = Varriant.DEFAULT;
+        while (true) {
+            System.out.println("Willkommen - für das klassische Spiel wähle bitte [K] für die Scheldon Lee Cooper Variante [S]");
+            String variant = s.next().toUpperCase();
+            if (variant.equalsIgnoreCase("S")) {
+                v = Varriant.SPOCK;
+                break;
+            }
+            if (variant.equalsIgnoreCase("K")) {
+                break;
+            }
+        }
 
-        System.out.println(String.format("Willkommen - wähle [%s] für Schere, [%s] für Stein oder [%s] für Papier",
-                Choice.SCHERE.getAbr(), Choice.STEIN.getAbr(), Choice.PAPIER.getAbr()));
+        System.out.println(String.format("Willkommen - wähle %s", Choice.printChoices(v)));
 
         while (true) {
             String move = s.next().toUpperCase();
@@ -21,12 +33,10 @@ public class Main {
                 break;
             }
             try {
-                Choice choice = Choice.getChoice(move);
-                printResult(game.choose(choice));
+                Choice choice = Choice.getChoice(move, v);
+                printResult(game.choose(choice, v));
             } catch (IllegalArgumentException e) {
-                System.out.println(String.format("%s ist leider nicht gültig. Wähle [%s] für Schere, [%s] für Stein " +
-                                "oder [%s] für Papier oder [Q] um das Spiel abzubrechen", move, Choice.SCHERE.getAbr(),
-                        Choice.STEIN.getAbr(), Choice.PAPIER.getAbr()));
+                System.out.println(String.format("%s ist leider nicht gültig %s. Wähle %s", move, e.getMessage(), Choice.printChoices(v)));
             }
         }
         System.out.println(String.format("Das Ergebnis lautet: %s.", game.getScore()));

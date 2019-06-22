@@ -1,25 +1,26 @@
 package com.macilias.games.controller;
 
 import com.macilias.games.model.Choice;
+import com.macilias.games.model.Varriant;
 
 import java.util.Random;
 
 public class GameImpl implements Game {
 
-    int playerScore = 0;
-    int computerScore = 0;
-    Random random = new Random(467462421234L);
-    Choice.ChoiceComparator comp = new Choice.ChoiceComparator();
+    private int playerScore = 0;
+    private int computerScore = 0;
+    private Random random = new Random(467462421234L);
+    private Choice.ChoiceComparator comp = new Choice.ChoiceComparator();
 
-    public int choose(Choice c1) {
-        Choice c2 = Choice.getChoice(random.nextInt(3));
+    public int choose(Choice c1, Varriant v) {
+        Choice c2 = Choice.getChoice(random.nextInt(Choice.values().length), v);
         System.out.println(String.format("Du wählst %s", c1.name()));
         System.out.println(String.format("Computer wählt %s", c2.name()));
         int res = comp.compare(c1, c2);
-        if (res == 1) {
+        if (res > 0) {
             playerScore ++;
         }
-        if (res == -1) {
+        if (res < 0) {
             computerScore ++;
         }
         return res;
